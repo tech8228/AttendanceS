@@ -1,0 +1,8 @@
+2024/02/14  
+Ashok Chand  (First Scrum)
+1. Done since last meeting
+- Worked on proposal
+- Created Git and trello board
+- Planned for ERD database
+2. Doing today
+- Work on the project 
