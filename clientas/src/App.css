@@ -1,0 +1,119 @@
+.App {
+  text-align: center;
+}
+
+body {
+  background-color: #f5f5f5; /* Light gray background */
+  color: #333; /* Dark gray text */
+}
+
+p {
+  color: #333;
+  font-size: 20px;
+}
+
+.date {
+  font-size: 12px;
+  color: #666; /* Medium gray date color */
+}
+
+label {
+  color: #333;
+}
+
+span {
+  color: #e44d26; /* Red span text */
+}
+
+button {
+  background-color: #4caf50; /* Green button */
+  height: 40px;
+  width: 80px;
+  border: 0;
+  margin: 10px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff; /* White text */
+}
+
+.bigBody {
+  height: 150px;
+  width: 1000px;
+}
+
+.commentBox {
+  height: 80px;
+  width: 500px;
+}
+
+.outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  min-height: 220px;
+  border: 2px solid #4caf50; /* Green border */
+  border-radius: 15px;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.commentcard {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: fit-content;
+  border: 2px solid #4caf50; /* Green border */
+  border-radius: 15px;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  margin: 5px;
+}
+
+.title {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 24px;
+  color: #333;
+}
+
+.navbar {
+  margin: 0;
+  padding: 20px;
+  border-radius: 30px;
+  background-color: #333; /* Dark gray background */
+  display: flex;
+  justify-content: space-evenly;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  color: #fff; /* White text */
+  font-size: 20px;
+  margin: 20px;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: #4caf50; /* Green text on hover */
+}
+
+.innerFile button {
+  height: 30px;
+  width: 80px;
+  background-color: rgb(112, 210, 243);
+  font-size: 12px;
+  color: #8d8484;
+}
