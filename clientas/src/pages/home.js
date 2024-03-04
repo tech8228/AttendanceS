@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useHistory } from "react-router-dom";
 import API_URL from "../service/api";
 import { AuthContext } from "../helper/AuthContext";
 
@@ -67,67 +67,85 @@ function Home() {
   };
 
   return (
-    <div className="outer">
+    <div className="outer ">
       {authState && (
-        <div className="extra-controls">
-          <div>
-            <label>Select Course:</label>
-            <select
-              value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
-            >
-              <option value="">--Select--</option>
-              {courses.map((course) => (
-                <option key={courses.courseId} value={courses.courseId}>
-                  {course.courseName}
-                </option>
-              ))}
-            </select>
+        <div>
+          <p></p>
+          <div className="innerfile right">
+            <button onClick={() => navi("/assign")}>Course Assignment</button>
+            <button onClick={() => navi("/register")}>Student</button>
+            <button onClick={() => navi("/courses")}>Course</button>
           </div>
-          <div>
-            <label>Select Date:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+          <p></p>
+          <div></div>
+          <div className="extra-controls">
+            <div className="innerfile">
+              <label>Select Course:</label>
+              <select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              >
+                <option value="">--Select--</option>
+                {courses.map((course) => (
+                  <option key={course.courseID} value={course.courseID}>
+                    {course.CourseName}
+                  </option>
+                ))}
+              </select>
+
+              <label>Select Date:</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+              <button onClick={() => navi("/register")}>Get Attendance</button>
+            </div>
           </div>
         </div>
       )}
-      <div>
-        <input
-          type="text"
-          placeholder="Student Name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      {searchResults &&
-        searchResults.map((value) => {
-          return (
-            <div
-              className="card"
-              onClick={() => navigateToSingle(value.StudentId)}
-              key={value.StudentId}
-            >
-              <div className="inner">
-                <label> Student Name: </label>
-                <h2 className="title">{value.StudentName}</h2>
-              </div>
 
-              <div className="inner">
-                <label> Job Location: </label>
-                <label>{value.email}</label>
-              </div>
-              <div className="inner">
-                <p className="date">
-                  Registered Date: {value.RegistrationDate.split("T")[0]}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+      <div className="container-fluid bg-info vh-100 vw-100">
+        <div className="rounded">
+          <input
+            type="text"
+            placeholder="Student Name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ marginRight: "5px" }}
+          />
+          <button className="rounded" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+        <h3>Students</h3>
+
+        <div className="table-responsive">
+          <table className="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Student ID </th>
+                <th> Student Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchResults &&
+                searchResults.map((student) => {
+                  return (
+                    <tr>
+                      <td>{student.studentID}</td>
+                      <td>{student.StudentName}</td>
+                      <td>{student.email}</td>
+                      <td>{student.RegistrationDate.split("T")[0]}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Students } = require("../models");
+const { Students, Courses } = require("../models");
 const { validateToken } = require("../middleware/Authmiddleware");
 const { Op } = require("sequelize");
 
@@ -25,6 +25,22 @@ router.get("/", async (req, res) => {
     res.status(200).json(listOfStudents);
   } catch (error) {
     console.error("Error fetching Student list:", error);
+
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/courses", async (req, res) => {
+  try {
+    const listOfCourses = await Courses.findAll();
+
+    if (listOfCourses.length === 0) {
+      return res.status(404).json({ error: "No Courses found" });
+    }
+
+    res.status(200).json(listOfCourses);
+  } catch (error) {
+    console.error("Error fetching Courses list:", error);
 
     res.status(500).json({ error: "Internal server error" });
   }

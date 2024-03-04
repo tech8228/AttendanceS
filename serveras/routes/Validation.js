@@ -16,4 +16,11 @@ const validateLogin = [
   body("password").notEmpty().withMessage("Password is required"),
 ];
 
-module.exports = { validateRegistration, validateLogin };
+const validateCourse = [
+  body("CourseName")
+    .notEmpty()
+    .isLength({ min: 2 })
+    .withMessage("Course Name is required"),
+];
+
+module.exports = { validateRegistration, validateLogin, validateCourse };

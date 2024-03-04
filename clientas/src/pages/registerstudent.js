@@ -1,14 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API_URL from "../service/api";
-import { AuthContext } from "../helper/AuthContext";
 
 function Registration() {
-  const { authState } = useContext(AuthContext);
-
   const initialValues = {
     StudentName: "",
     email: "",
@@ -20,7 +17,7 @@ function Registration() {
       .min(4)
       .max(20)
       .matches(/^(?:[a-z0-9]*)$/gi, "Only lowercase letters and numbers")
-      .required("Student Name required"),
+      .required("username required"),
     email: Yup.string().email("invaild email").required("email is required"),
   });
 
@@ -31,18 +28,13 @@ function Registration() {
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        if (authState) {
-          navi("/");
-        } else {
-          navi("/login");
-        }
+        navi("/login");
       }
     });
   };
 
   return (
     <div className="outer">
-      <h2>Student Registration</h2>
       <div className="card">
         <Formik
           initialValues={initialValues}
@@ -62,12 +54,14 @@ function Registration() {
               <Field name="email" />
             </div>
             <ErrorMessage name="email" component="span" />
+            {/* <div className="inner">
+              <label>Password: </label>
+              <ErrorMessage name="password" component="span" />
+              <Field name="password" type="password" />
+            </div> */}
 
-            <div className="innerfile">
+            <div className="inner">
               <button type="submit"> Register</button>
-              <button type="button" onClick={() => navi("/")}>
-                Back
-              </button>
             </div>
           </Form>
         </Formik>

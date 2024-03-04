@@ -59,7 +59,7 @@ function Login() {
           />
         </div>
 
-        <div className="inner">
+        <div className="innerfile">
           <button onClick={login}> Login</button>
         </div>
         <div>
