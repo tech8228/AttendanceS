@@ -6,3 +6,24 @@ Ashok Chand  (First Scrum)
 - Planned for ERD database
 2. Doing today
 - Work on the project 
+
+
+2024/03/2  
+Ashok Chand  (First Scrum)
+1. Done since last meeting
+- planned the databasd as database first
+- worked on student registration
+- home page with register
+2. Doing today
+- work on adding course 
+- check login
+
+2024/03/3 
+Ashok Chand  (First Scrum)
+1. Done since last meeting
+- make sequelize the database
+- was able to add course
+- register course as admin
+2. Doing today
+- worked on home with display of button based on login status 
+- assign course to student
