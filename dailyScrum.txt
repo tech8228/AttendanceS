@@ -1,4 +1,4 @@
-2024/02/14  
+2024/03/01  
 Ashok Chand  (First Scrum)
 1. Done since last meeting
 - Worked on proposal
@@ -27,3 +27,14 @@ Ashok Chand  (First Scrum)
 2. Doing today
 - worked on home with display of button based on login status 
 - assign course to student
+
+
+2024/03/4 
+Ashok Chand  (First Scrum)
+1. Done since last meeting
+- working on admin home page
+- worked on assign course to student
+- delete course
+2. Doing today
+- worked on admin page for attendance record past
+- update the records 
