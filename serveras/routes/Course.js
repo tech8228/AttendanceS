@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Courses } = require("../models");
+const { Courses, AttendanceRecords } = require("../models");
 const { validateToken } = require("../middleware/Authmiddleware");
 const { check } = require("express-validator");
 const { validateCourse } = require("../routes/Validation");
@@ -45,23 +45,40 @@ router.post("/", validateCourse, async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   const courseId = req.params.id;
-  Courses.destroy({
-    where: {
-      courseID: courseId,
-    },
-  })
-    .then(function (deletedRecord) {
-      if (deletedRecord === 1) {
-        res.status(200).json({ message: "Deleted successfully" });
-      } else {
-        res.status(404).json({ message: "Record not found" });
-      }
-    })
-    .catch(function (error) {
-      res.status(500).json({ message: "Internal server error", error: error });
+  try {
+    const attendanceRecordsCount = await AttendanceRecords.count({
+      where: {
+        CourseID: courseId,
+      },
     });
+
+    if (attendanceRecordsCount > 0) {
+      await AttendanceRecords.destroy({
+        where: {
+          CourseID: courseId,
+        },
+      });
+    }
+
+    const deletedRecordCount = await Courses.destroy({
+      where: {
+        courseID: courseId,
+      },
+    });
+
+    if (deletedRecordCount === 1) {
+      res.status(200).json({
+        message: "Course and associated records deleted successfully",
+      });
+    } else {
+      res.status(404).json({ message: "Course record not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting course and associated records:", error);
+    res.status(500).json({ message: "Internal server error", error: error });
+  }
 });
 
 router.get("/", validateToken, (req, res) => {

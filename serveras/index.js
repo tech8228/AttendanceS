@@ -15,8 +15,10 @@ const homeRouter = require("./routes/Home");
 app.use("/", homeRouter);
 const courseRouter = require("./routes/Course");
 app.use("/courses", courseRouter);
-// const cmyRouter = require("./routes/Companies");
-// app.use("/companies", cmyRouter);
+const assignRouter = require("./routes/Assign");
+app.use("/assign", assignRouter);
+const attendRouter = require("./routes/AttendHome");
+app.use("/attend", attendRouter);
 const studentRouter = require("./routes/Student");
 app.use("/auth", studentRouter);
 

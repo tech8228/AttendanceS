@@ -8,7 +8,7 @@ const { Op } = require("sequelize");
 //   res.send("Hello from the server!");
 // });
 
-router.get("/", async (req, res) => {
+router.get("/attend", async (req, res) => {
   try {
     const listOfStudents = await Students.findAll({
       where: {
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/courses", async (req, res) => {
+router.get("/attend/courses", async (req, res) => {
   try {
     const listOfCourses = await Courses.findAll();
 
@@ -46,7 +46,7 @@ router.get("/courses", async (req, res) => {
   }
 });
 
-router.get("/delete/:id", async (req, res) => {
+router.get("/attend/delete/:id", async (req, res) => {
   try {
     const JobID = req.params.id;
     const job = await Students.findByPk(JobID);
@@ -61,7 +61,7 @@ router.get("/delete/:id", async (req, res) => {
   }
 });
 
-router.post("/", validateToken, async (req, res) => {
+router.post("/attend", validateToken, async (req, res) => {
   try {
     const job = req.body;
     const jobId = req.userToken.id;
@@ -84,7 +84,7 @@ router.post("/", validateToken, async (req, res) => {
   } //res.json(true)
 });
 
-router.get("/search", async (req, res) => {
+router.get("/attend/search", async (req, res) => {
   console.log("reached search");
   try {
     const { name } = req.query;
@@ -107,7 +107,7 @@ router.get("/search", async (req, res) => {
   }
 });
 
-router.put("/update/:studentId", async (req, res) => {
+router.put("/attend/update/:studentId", async (req, res) => {
   try {
     const { studentId } = req.params;
     const { Status, Date } = req.body;
@@ -137,7 +137,7 @@ router.put("/update/:studentId", async (req, res) => {
   }
 });
 
-router.get("/attendance", async (req, res) => {
+router.get("/attend/attendance", async (req, res) => {
   try {
     const { courseId, date } = req.query;
 

@@ -42,7 +42,7 @@ function Registration() {
       if (response.data.error) {
         console.log(response.data.error);
       } else {
-        navi("/");
+        navi("/homeattendance");
       }
     });
   };
@@ -65,7 +65,7 @@ function Registration() {
     );
     if (confirmDelete) {
       axios
-        .delete(`${API_URL}/delete/${id}`)
+        .delete(`${API_URL}/courses/delete/${id}`)
         .then((res) => {
           setDeleted(true);
         })

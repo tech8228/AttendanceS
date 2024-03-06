@@ -6,6 +6,9 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Registration from "./pages/register";
 import Course from "./pages/course";
+import Assign from "./pages/assign";
+import PieChart from "./pages/piechart";
+import HomeAttendance from "./pages/homeattendance";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -41,13 +44,19 @@ function App() {
           <Router>
             <div>
               <h1>Welcome to Student Attendance Sheet </h1>
+              <h2>
+                Today is:{" "}
+                <span style={{ color: "Brown" }}>
+                  {new Date().toLocaleDateString()}
+                </span>
+              </h2>
             </div>
             <div className="navbar">
               <Link to="/">Home Page</Link>
               {authState ? (
                 <>
-                  {/* <Link to="/profile">Profile</Link>
-                <Link to="/company">Company</Link> */}
+                  {/* <Link to="/profile">Profile</Link>*/}
+                  <Link to="/homeattendance">Attendance</Link>
 
                   <Link onClick={logout}>Logout</Link>
                 </>
@@ -61,6 +70,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Course />} />
+              <Route path="/assign" element={<Assign />} />
+              <Route path="/chart" element={<PieChart />} />
+              <Route path="/homeattendance" element={<HomeAttendance />} />
 
               {/* <Route path="/job/:id" element={<SingleJob />} /> */}
               {/* <Route path="/profile" element={<Profile />} /> */}

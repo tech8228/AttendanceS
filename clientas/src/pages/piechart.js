@@ -3,8 +3,12 @@ import axios from "axios";
 import { useNavigate, Link, useHistory } from "react-router-dom";
 import API_URL from "../service/api";
 import { AuthContext } from "../helper/AuthContext";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
 
-function Home() {
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function PieChart() {
   const [listOfStudents, setListOfStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -12,6 +16,18 @@ function Home() {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [courses, setListCourses] = useState([]);
+
+  const data = {
+    labels: ["One", "Two", "Three"],
+    datasets: [
+      {
+        data: [3, 6, 9, 12],
+        backgroundColor: ["aqua", "orangered", "purple", "brown"],
+      },
+    ],
+  };
+
+  const options = {};
 
   let navi = useNavigate();
 
@@ -68,6 +84,14 @@ function Home() {
 
   return (
     <div className="outer ">
+      <div
+        style={{
+          padding: "20px",
+          width: "50%",
+        }}
+      >
+        <Pie data={data} options={options}></Pie>
+      </div>
       {authState && (
         <div>
           <p></p>
@@ -78,6 +102,30 @@ function Home() {
           </div>
           <p></p>
           <div></div>
+          <div className="extra-controls">
+            <div className="innerfile">
+              <label>Select Course:</label>
+              <select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              >
+                <option value="">--Select--</option>
+                {courses.map((course) => (
+                  <option key={course.courseID} value={course.courseID}>
+                    {course.CourseName}
+                  </option>
+                ))}
+              </select>
+
+              <label>Select Date:</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+              <button onClick={() => navi("/register")}>Get Attendance</button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -126,4 +174,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default PieChart;

@@ -78,6 +78,30 @@ function Home() {
           </div>
           <p></p>
           <div></div>
+          <div className="extra-controls">
+            <div className="innerfile">
+              <label>Select Course:</label>
+              <select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              >
+                <option value="">--Select--</option>
+                {courses.map((course) => (
+                  <option key={course.courseID} value={course.courseID}>
+                    {course.CourseName}
+                  </option>
+                ))}
+              </select>
+
+              <label>Select Date:</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+              <button onClick={() => navi("/register")}>Get Attendance</button>
+            </div>
+          </div>
         </div>
       )}
 
