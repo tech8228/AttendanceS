@@ -38,3 +38,14 @@ Ashok Chand  (First Scrum)
 2. Doing today
 - worked on admin page for attendance record past
 - update the records 
+
+
+2024/03/5 
+Ashok Chand  (First Scrum)
+1. Done since last meeting
+- worked on error handle display
+- worked on assign course to student
+- worked in admin page
+2. Doing 
+- work on attendance display
+- update the attendance 
