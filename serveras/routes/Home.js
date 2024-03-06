@@ -47,17 +47,38 @@ router.get("/courses", async (req, res) => {
 });
 
 router.get("/delete/:id", async (req, res) => {
+  const studentId = req.params.id;
   try {
-    const JobID = req.params.id;
-    const job = await Students.findByPk(JobID);
-    if (!job) {
-      return res.status(404).json({ error: "Hello not found" });
-    }
-    res.status(200).json(job);
-  } catch (error) {
-    console.error("Error fetching job:", error);
+    const studentCount = await Students.count({
+      where: {
+        studentID: studentId,
+      },
+    });
 
-    res.status(500).json({ error: "Internal server error" });
+    if (studentCount > 0) {
+      await Students.destroy({
+        where: {
+          studentID: studentId,
+        },
+      });
+    }
+
+    const deletedAttendenceCount = await AttendanceRecords.destroy({
+      where: {
+        StudentID: studentId,
+      },
+    });
+
+    if (deletedAttendenceCount === 1) {
+      res.status(200).json({
+        message: "Student and associated records deleted successfully",
+      });
+    } else {
+      res.status(404).json({ message: "Student record not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting student and associated records:", error);
+    res.status(500).json({ message: "Internal server error", error: error });
   }
 });
 
@@ -190,6 +211,81 @@ router.get("/attendance", async (req, res) => {
   } catch (error) {
     console.error("Error fetching attendance:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/student/:id", async (req, res) => {
+  const { id } = req.params;
+  const { StudentName, email } = req.body;
+
+  try {
+    const updatedRowsCount = await Students.update(req.body, {
+      where: { studentID: id },
+    });
+
+    const updatedStudent = await Students.findOne({
+      where: { studentID: id },
+      // Add other attributes as needed
+    });
+
+    if (updatedRowsCount === 0) {
+      throw new Error("Student not found");
+    }
+    res.status(200).json(updatedStudent);
+  } catch (error) {
+    console.error("Error updating student:", error);
+    res.status(500).json({ message: { id } });
+  }
+});
+
+router.get("/student/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const student = await Students.findByPk(id);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    res.status(200).json(student);
+  } catch (error) {
+    console.error("Error fetching student details:", error);
+    res.status(500).json({ message: "Error fetching student details" });
+  }
+});
+
+router.delete("/student/delete/:id", async (req, res) => {
+  const studentId = req.params.id;
+  try {
+    const studentCount = await Students.count({
+      where: {
+        studentID: studentId,
+      },
+    });
+
+    if (studentCount > 0) {
+      await Students.destroy({
+        where: {
+          studentID: studentId,
+        },
+      });
+    }
+
+    const deletedAttendenceCount = await AttendanceRecords.destroy({
+      where: {
+        StudentID: studentId,
+      },
+    });
+
+    if (deletedAttendenceCount === 1) {
+      res.status(200).json({
+        message: "Student and associated records deleted successfully",
+      });
+    } else {
+      res.status(404).json({ message: "Student record not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting student and associated records:", error);
+    res.status(500).json({ message: "Internal server error", error: error });
   }
 });
 

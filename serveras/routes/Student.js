@@ -16,9 +16,9 @@ router.post("/", validateRegistration, async (req, res) => {
   if (!user) {
     //bcrypt.hash(password, 10).then(async (hash) => {
     try {
-      const currentDate = new Date();
+      const currentDate = new Date().toLocaleDateString();
       // Convert it to a string in ISO format and extract only the date part
-      const registrationDate = currentDate.toISOString().split("T")[0];
+      const registrationDate = currentDate;
 
       await Students.create({
         StudentName: username,

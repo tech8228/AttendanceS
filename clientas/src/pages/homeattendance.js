@@ -13,7 +13,7 @@ const StatusOptions = [
   { value: "Present", label: "Present" },
   { value: "Late", label: "Late" },
   { value: "Absent", label: "Absent" },
-  { value: "Permitted", label: "Leave Permitted" },
+  { value: "Leave Permitted", label: "Leave Permitted" },
 ];
 
 function HomeAttendance() {
@@ -54,32 +54,29 @@ function HomeAttendance() {
     fetchData();
   }, []);
 
-  const handleStatusChange = async (studentId, selectedValue) => {
+  const handleStatusChange = async (RecordID, selectedValue) => {
     try {
       const currentDate = selectedDate
         ? selectedDate
-        : new Date().toISOString().split("T")[0]; // Get current date if no date is selected
+        : new Date().toLocaleDateString(); // Get current date if no date is selected
 
       const method = selectedDate ? "PUT" : "POST"; // Determine HTTP method based on selected date
 
-      if (method === "PUT") {
-        // Use PUT request if datepicker was selected
-        await axios.put(`${API_URL}/attend/update/${studentId}`, {
-          Status: selectedValue,
-          Date: currentDate,
-        });
-      } else {
-        // Use POST request if datepicker was not selected
-        await axios.post(`${API_URL}/attend/update/${studentId}`, {
-          Status: selectedValue,
-          Date: currentDate,
-        });
-      }
+      //if (method === "PUT") {
+      // Use PUT request if datepicker was selected
+      await axios.put(`${API_URL}/attend/update/${RecordID}`, {
+        Status: selectedValue,
+        Date: currentDate,
+      });
+      // } else {
+      //   // Use POST request if datepicker was not selected
+      //   await axios.post(`${API_URL}/attend/update/${RecordID}`, {
+      //     Status: selectedValue,
+      //     Date: currentDate,
+      //   });
+      // }
     } catch (error) {
-      console.error(
-        `Error updating attendance for student ${studentId}:`,
-        error
-      );
+      console.error(`Error updating attendance for  ${RecordID}`, error);
     }
   };
 
@@ -160,10 +157,14 @@ function HomeAttendance() {
 
   return (
     <div className="outer ">
+      <h2>
+        Attendance for Date: {"  "}
+        <span {selectedDate ? selectedDate : new Date().toLocaleDateString()}> </span>
+      </h2>
       <div
         style={{
           padding: "20px",
-          width: "50%",
+          width: "40%",
         }}
       >
         <Pie data={data} options={options}></Pie>
@@ -224,16 +225,20 @@ function HomeAttendance() {
             <tbody>
               {listAttendance.map((Record) => {
                 return (
-                  <tr key={Record.StudentID}>
+                  <tr key={Record.RecordID}>
                     <td>{Record.StudentID}</td>
                     <td>{Record.StudentName}</td>
-                    <td>{Record.AttendanceDate}</td>
+                    <td>
+                      {Record.AttendanceDate
+                        ? Record.AttendanceDate.split("T")[0]
+                        : "N/A"}
+                    </td>
                     <td>{Record.Status}</td>
                     <td>
                       <select
                         value={Record.Status} // Set the selected value
                         onChange={(e) =>
-                          handleStatusChange(Record.StudentID, e.target.value)
+                          handleStatusChange(Record.RecordID, e.target.value)
                         } // Handle status change
                       >
                         <option value="">Select Status</option>

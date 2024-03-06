@@ -8,7 +8,7 @@ const { Op } = require("sequelize");
 //   res.send("Hello from the server!");
 // });
 
-router.get("/attend", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const listOfStudents = await Students.findAll({
       where: {
@@ -30,7 +30,7 @@ router.get("/attend", async (req, res) => {
   }
 });
 
-router.get("/attend/courses", async (req, res) => {
+router.get("/courses", async (req, res) => {
   try {
     const listOfCourses = await Courses.findAll();
 
@@ -46,7 +46,7 @@ router.get("/attend/courses", async (req, res) => {
   }
 });
 
-router.get("/attend/delete/:id", async (req, res) => {
+router.get("/delete/:id", async (req, res) => {
   try {
     const JobID = req.params.id;
     const job = await Students.findByPk(JobID);
@@ -61,7 +61,7 @@ router.get("/attend/delete/:id", async (req, res) => {
   }
 });
 
-router.post("/attend", validateToken, async (req, res) => {
+router.post("/", validateToken, async (req, res) => {
   try {
     const job = req.body;
     const jobId = req.userToken.id;
@@ -84,7 +84,7 @@ router.post("/attend", validateToken, async (req, res) => {
   } //res.json(true)
 });
 
-router.get("/attend/search", async (req, res) => {
+router.get("/search", async (req, res) => {
   console.log("reached search");
   try {
     const { name } = req.query;
@@ -107,14 +107,14 @@ router.get("/attend/search", async (req, res) => {
   }
 });
 
-router.put("/attend/update/:studentId", async (req, res) => {
+router.put("/update/:recordnum", async (req, res) => {
   try {
-    const { studentId } = req.params;
+    const { recordnum } = req.params;
     const { Status, Date } = req.body;
 
     // Find the attendance record for the specified studentId
     const attendanceRecord = await AttendanceRecords.findOne({
-      where: { StudentID: studentId },
+      where: { RecordID: recordnum },
     });
 
     if (attendanceRecord) {
@@ -137,9 +137,40 @@ router.put("/attend/update/:studentId", async (req, res) => {
   }
 });
 
-router.get("/attend/attendance", async (req, res) => {
+router.post("/update/:recordnum", async (req, res) => {
+  try {
+    const { recordnum } = req.params;
+    const { Status, Date } = req.body;
+
+    // Find the attendance record for the specified studentId
+    const attendanceRecord = await AttendanceRecords.findOne({
+      where: { RecordID: recordnum },
+    });
+
+    if (attendanceRecord) {
+      // Update the status and date if provided
+      if (Status) attendanceRecord.Status = Status;
+      if (Date) attendanceRecord.AttendanceDate = Date;
+
+      // Save the updated attendance record
+      await attendanceRecord.save();
+
+      res
+        .status(200)
+        .json({ message: "Attendance record updated successfully" });
+    } else {
+      res.status(404).json({ error: "Attendance record not found" });
+    }
+  } catch (error) {
+    console.error("Error updating attendance:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/attendance", async (req, res) => {
   try {
     const { courseId, date } = req.query;
+    const todayDate = new Date().toLocaleDateString();
 
     const whereClause = { CourseID: courseId };
     if (date) {
@@ -154,7 +185,7 @@ router.get("/attend/attendance", async (req, res) => {
     if (date) {
       attendanceRecords = await AttendanceRecords.findAll({
         where: whereClause,
-        attributes: ["StudentID", "AttendanceDate", "Status"],
+        attributes: ["RecordID", "StudentID", "AttendanceDate", "Status"],
         include: [
           {
             model: Students,
@@ -163,6 +194,39 @@ router.get("/attend/attendance", async (req, res) => {
         ],
       });
     } else {
+      attendancecheckRecords = await AttendanceRecords.findAll({
+        where: whereClause,
+        attributes: ["StudentID"],
+        group: ["StudentID"],
+      });
+
+      const studentIds = attendancecheckRecords.map(
+        (record) => record.StudentID
+      );
+      const existingRecords = await AttendanceRecords.findAll({
+        where: {
+          StudentID: {
+            [Op.in]: studentIds,
+          },
+          CourseID: courseId,
+          AttendanceDate: todayDate,
+        },
+      });
+
+      const existingcheckStudentIds = existingRecords.map(
+        (record) => record.StudentID
+      );
+
+      for (const studentId of studentIds) {
+        if (!existingcheckStudentIds.includes(studentId)) {
+          await AttendanceRecords.create({
+            StudentID: studentId,
+            CourseID: courseId,
+            AttendanceDate: todayDate,
+          });
+        }
+      }
+
       attendanceRecords = await AttendanceRecords.findAll({
         where: whereClause,
         attributes: ["StudentID"],
@@ -174,10 +238,21 @@ router.get("/attend/attendance", async (req, res) => {
           },
         ],
       });
+      attendanceRecords = await AttendanceRecords.findAll({
+        where: { AttendanceDate: todayDate, CourseID: courseId },
+        attributes: ["RecordID", "StudentID", "AttendanceDate", "Status"],
+        include: [
+          {
+            model: Students,
+            attributes: ["StudentName"], // Include StudentName from the associated Students table
+          },
+        ],
+      });
     }
 
     // Extract relevant data and send response
     const formattedAttendanceRecords = attendanceRecords.map((record) => ({
+      RecordID: record.RecordID,
       StudentID: record.StudentID,
       AttendanceDate: record.AttendanceDate,
       Status: record.Status,

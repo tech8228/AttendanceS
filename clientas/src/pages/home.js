@@ -12,6 +12,7 @@ function Home() {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [courses, setListCourses] = useState([]);
+  const [deleted, setDeleted] = useState(true);
 
   let navi = useNavigate();
 
@@ -66,6 +67,24 @@ function Home() {
     }
   };
 
+  function handleUpdate(id) {
+    navi(`/registerstudent/${id}`);
+  }
+
+  function handleDelete(id) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete Student with ID : {id}?"
+    );
+    if (confirmDelete) {
+      axios
+        .delete(`${API_URL}/student/delete/${id}`)
+        .then((res) => {
+          setDeleted(true);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
   return (
     <div className="outer ">
       {authState && (
@@ -73,8 +92,8 @@ function Home() {
           <p></p>
           <div className="innerfile right">
             <button onClick={() => navi("/assign")}>Course Assignment</button>
-            <button onClick={() => navi("/register")}>Student</button>
-            <button onClick={() => navi("/courses")}>Course</button>
+            <button onClick={() => navi("/register")}>Add Student</button>
+            <button onClick={() => navi("/courses")}>Add Course</button>
           </div>
           <p></p>
           <div></div>
@@ -104,6 +123,7 @@ function Home() {
                 <th> Student Name</th>
                 <th>Email</th>
                 <th>Registration Date</th>
+                {authState && <th>Actions </th>}
               </tr>
             </thead>
             <tbody>
@@ -115,6 +135,22 @@ function Home() {
                       <td>{student.StudentName}</td>
                       <td>{student.email}</td>
                       <td>{student.RegistrationDate.split("T")[0]}</td>
+                      {authState && (
+                        <td>
+                          <button
+                            className="btn mx-2 btn-info"
+                            onClick={() => handleUpdate(student.studentID)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn mx-2 btn-danger"
+                            onClick={() => handleDelete(student.studentID)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}

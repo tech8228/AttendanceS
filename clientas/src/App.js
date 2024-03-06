@@ -11,6 +11,7 @@ import PieChart from "./pages/piechart";
 import HomeAttendance from "./pages/homeattendance";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import RegisterStudent from "./pages/registerstudent";
 
 function App() {
   const [authState, setAuthState] = useState(false);
@@ -56,7 +57,7 @@ function App() {
               {authState ? (
                 <>
                   {/* <Link to="/profile">Profile</Link>*/}
-                  <Link to="/homeattendance">Attendance</Link>
+                  <Link to="/attend">Attendance</Link>
 
                   <Link onClick={logout}>Logout</Link>
                 </>
@@ -72,8 +73,11 @@ function App() {
               <Route path="/courses" element={<Course />} />
               <Route path="/assign" element={<Assign />} />
               <Route path="/chart" element={<PieChart />} />
-              <Route path="/homeattendance" element={<HomeAttendance />} />
-
+              <Route path="/attend" element={<HomeAttendance />} />
+              <Route
+                path="/registerstudent/:id?"
+                element={<RegisterStudent />}
+              />
               {/* <Route path="/job/:id" element={<SingleJob />} /> */}
               {/* <Route path="/profile" element={<Profile />} /> */}
               {/* <Route path="/createJob" element={<CreateJob />} /> */}

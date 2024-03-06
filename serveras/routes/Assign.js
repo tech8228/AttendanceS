@@ -60,6 +60,7 @@ router.post("/attendance", validateToken, async (req, res) => {
       await AttendanceRecords.create({
         StudentID: studentID,
         CourseID: courseID,
+        AttendanceDate: new Date().toLocaleDateString(),
       });
       res.json("Success");
     } catch (error) {
