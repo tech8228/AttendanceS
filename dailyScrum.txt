@@ -9,7 +9,7 @@ Ashok Chand  (First Scrum)
 
 
 2024/03/2  
-Ashok Chand  (First Scrum)
+Ashok Chand  
 1. Done since last meeting
 - planned the databasd as database first
 - worked on student registration
@@ -19,7 +19,7 @@ Ashok Chand  (First Scrum)
 - check login
 
 2024/03/3 
-Ashok Chand  (First Scrum)
+Ashok Chand  
 1. Done since last meeting
 - make sequelize the database
 - was able to add course
@@ -30,7 +30,7 @@ Ashok Chand  (First Scrum)
 
 
 2024/03/4 
-Ashok Chand  (First Scrum)
+Ashok Chand  
 1. Done since last meeting
 - working on admin home page
 - worked on assign course to student
@@ -41,7 +41,7 @@ Ashok Chand  (First Scrum)
 
 
 2024/03/5 
-Ashok Chand  (First Scrum)
+Ashok Chand  
 1. Done since last meeting
 - worked on error handle display
 - worked on assign course to student
@@ -49,3 +49,14 @@ Ashok Chand  (First Scrum)
 2. Doing 
 - work on attendance display
 - update the attendance 
+
+
+2024/03/6 
+Ashok Chand  
+1. Done since last meeting
+- worked on get the student list for the day
+- worked on to take attendance for date now
+- able to edit the student profile
+2. Doing 
+- work on attendance get record
+- save to work on making edit for old record 
