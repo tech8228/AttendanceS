@@ -59,14 +59,6 @@ function Home() {
     }
   };
 
-  const navigateToSingle = (StudentID) => {
-    if (StudentID) {
-      navi(`/job/${StudentID}`, { state: { StudentNum: StudentID } });
-    } else {
-      console.error("Job ID is undefined or null");
-    }
-  };
-
   function handleUpdate(id) {
     navi(`/registerstudent/${id}`);
   }

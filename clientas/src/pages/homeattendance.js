@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import API_URL from "../service/api";
 import { AuthContext } from "../helper/AuthContext";
 import Select from "react-select";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const StatusOptions = [
   { value: "Present", label: "Present" },
@@ -94,6 +98,42 @@ function HomeAttendance() {
         Status: record.Status,
       }));
 
+      setStatusList(attendanceData);
+
+      let presentCount = 0;
+      let lateCount = 0;
+      let absentCount = 0;
+      let permittedCount = 0;
+      let nullCount = 0;
+
+      response.data.forEach((checkStatus) => {
+        switch (checkStatus.Status) {
+          case "Present":
+            presentCount++;
+            break;
+          case "Late":
+            lateCount++;
+            break;
+          case "Absent":
+            absentCount++;
+            break;
+          case "Permitted":
+            permittedCount++;
+            break;
+          default:
+            nullCount++;
+            break;
+        }
+      });
+
+      const statusData = [
+        presentCount,
+        lateCount,
+        absentCount,
+        permittedCount,
+        nullCount,
+      ];
+
       setStatusData(statusData);
       // Set the extracted data to the statusList state
 
@@ -117,7 +157,20 @@ function HomeAttendance() {
 
   return (
     <div className="outer ">
-      <div></div>
+      <h2>
+        Attendance for Date: {"  "}
+        <span style={{ color: "Green" }}>
+          {selectedDate ? selectedDate : new Date().toLocaleDateString()}{" "}
+        </span>
+      </h2>
+      <div
+        style={{
+          padding: "20px",
+          width: "25%",
+        }}
+      >
+        <Pie data={data} options={options}></Pie>
+      </div>
       {authState && (
         <div>
           <p></p>
@@ -150,7 +203,7 @@ function HomeAttendance() {
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
               />
-              <button on={handleGetAttendance}>Get Attendance</button>
+              <button onClick={handleGetAttendance}>Get Attendance</button>
             </div>
             <p>{error && <p style={{ color: "red" }}>{error}</p>}</p>
           </div>
@@ -185,9 +238,9 @@ function HomeAttendance() {
                     <td>{Record.Status}</td>
                     <td>
                       <select
-                        value={Record.Status} // Set the selected value
+                        value={Record.label} // Set the selected value
                         onChange={(e) =>
-                          handleStatusChange(Record.studentID, e.target.value)
+                          handleStatusChange(Record.RecordID, e.target.value)
                         } // Handle status change
                       >
                         <option value="">Select Status</option>

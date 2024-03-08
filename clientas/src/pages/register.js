@@ -19,7 +19,7 @@ function Registration() {
     username: Yup.string()
       .min(4)
       .max(20)
-      .matches(/^(?:[a-z0-9]*)$/gi, "Only lowercase letters and numbers")
+      .matches(/^(?:[a-z0-9\s]*)$/gi, "Only lowercase letters and numbers")
       .required("Student Name required"),
     email: Yup.string().email("invaild email").required("email is required"),
   });
@@ -67,6 +67,9 @@ function Registration() {
               <button type="submit"> Register</button>
               <button type="button" onClick={() => navi("/")}>
                 Back
+              </button>
+              <button type="button" onClick={() => navi("/studentrecord")}>
+                Check Attendance
               </button>
             </div>
           </Form>

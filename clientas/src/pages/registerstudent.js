@@ -31,6 +31,11 @@ function RegisterStudent() {
   };
 
   const validationSchema = Yup.object().shape({
+    StudentName: Yup.string()
+      .min(4)
+      .max(20)
+      .matches(/^(?:[a-z0-9\s]*)$/gi, "Only lowercase letters and numbers")
+      .required("Student Name required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
   });
 
@@ -61,7 +66,7 @@ function RegisterStudent() {
               </div>
               <div className="inner">
                 <label>Student Name: </label>
-                <Field name="StudentName" type="text"  />
+                <Field name="StudentName" type="text" />
               </div>
               <div className="inner">
                 <label>Email: </label>

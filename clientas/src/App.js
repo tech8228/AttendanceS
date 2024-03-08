@@ -12,13 +12,15 @@ import HomeAttendance from "./pages/homeattendance";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RegisterStudent from "./pages/registerstudent";
+import API_URL from "./service/api";
+import StudentRecord from "./pages/studentrecord";
 
 function App() {
   const [authState, setAuthState] = useState(false);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/auth/", {
+      .get(`${API_URL}/auth/`, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then((response) => {
@@ -77,6 +79,10 @@ function App() {
               <Route
                 path="/registerstudent/:id?"
                 element={<RegisterStudent />}
+              />
+              <Route
+                path="/studentrecord/?"
+                element={<StudentRecord />}
               />
               {/* <Route path="/job/:id" element={<SingleJob />} /> */}
               {/* <Route path="/profile" element={<Profile />} /> */}
