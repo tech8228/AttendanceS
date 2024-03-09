@@ -28,14 +28,14 @@ function Login() {
         }
       })
       .catch((error) => {
-        setError(error.response.data.error); // Set a generic error message for any unexpected errors
+        setError(error.response.data.error);
         console.error("Error logging in:", error);
       });
   };
   return (
     <div className="outer">
       <div className="card">
-        {error && ( // Conditionally render error message
+        {error && (
           <div className="inner" style={{ color: "red" }}>
             {error}
           </div>

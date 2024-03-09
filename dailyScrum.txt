@@ -70,3 +70,13 @@ Ashok Chand
 2. Doing 
 - work on attendance save issue
 - save to work on making edit for old record 
+
+2024/03/8 
+Ashok Chand  
+1. Done since last meeting
+- worked on attendance save issue
+- worked on making edit for old record 
+- recitified the get records
+2. Doing 
+- heroku hosting
+- aws mysql database hosting

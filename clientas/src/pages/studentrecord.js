@@ -11,17 +11,16 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function StudentRecord() {
   const [listOfStudents, setListOfStudents] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const { authState } = useContext(AuthContext);
   const [selectedOption, setSelectedOption] = useState("");
-
   const [listAttendance, setListAttendance] = useState([]);
   const [error, setError] = useState("");
   const [statusData, setStatusData] = useState([]);
-
   const [statusList, setStatusList] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [filteredStatusList, setFilteredStatusList] = useState([]);
 
   const options = {};
 
@@ -36,74 +35,39 @@ function StudentRecord() {
     );
   }, [listAttendance]);
 
-  const handleGetAttendance = async () => {
-    let requestData = { courseId: selectedOption };
-
-    try {
-      const response = await axios.get(`${API_URL}/attend/attendance`, {
-        params: requestData,
-      });
-      setListAttendance(response.data);
-      const attendanceData = response.data.map((record) => ({
-        StudentID: record.StudentID,
-        Status: record.Status,
-      }));
-
-      setStatusList(attendanceData);
-
-      let presentCount = 0;
-      let lateCount = 0;
-      let absentCount = 0;
-      let permittedCount = 0;
-      let nullCount = 0;
-
-      response.data.forEach((checkStatus) => {
-        switch (checkStatus.Status) {
-          case "Present":
-            presentCount++;
-            break;
-          case "Late":
-            lateCount++;
-            break;
-          case "Absent":
-            absentCount++;
-            break;
-          case "Permitted":
-            permittedCount++;
-            break;
-          default:
-            nullCount++;
-            break;
-        }
-      });
-
-      const statusData = [
-        presentCount,
-        lateCount,
-        absentCount,
-        permittedCount,
-        nullCount,
-      ];
-
-      setStatusData(statusData);
-      // Set the extracted data to the statusList state
-
-      // Handle the response data as needed
-      console.log("Attendance data:", response.data);
-      setError("");
-    } catch (error) {
-      console.error("Error fetching attendance:", error);
+  useEffect(() => {
+    // Filter status list based on selected course
+    if (selectedCourse) {
+      console.log("Selected course:", selectedCourse);
+      const filteredList = statusList.filter(
+        (item) => item.CourseName === selectedCourse.value
+      );
+      console.log("Filtered list:", filteredList);
+      setFilteredStatusList(filteredList);
+    } else {
+      setFilteredStatusList([]);
     }
-  };
+  }, [selectedCourse, statusList]);
 
   const handleSearch = async () => {
     try {
+      setFilteredStatusList([]);
+
       const response = await axios.get(`${API_URL}/search?sname=${searchTerm}`);
       if (response.data.error) {
         setError(response.data.error);
       } else {
         setSearchResults(response.data);
         setError("");
+
+        const statusData = response.data.map((record) => ({
+          CourseName: record.CourseName,
+          StudentID: record.StudentID,
+          AttendanceDate: record.AttendanceDate,
+          Status: record.Status,
+        }));
+
+        setStatusList(statusData);
 
         let presentCount = 0;
         let lateCount = 0;
@@ -122,7 +86,7 @@ function StudentRecord() {
             case "Absent":
               absentCount++;
               break;
-            case "Permitted":
+            case "Leave Permitted":
               permittedCount++;
               break;
             default:
@@ -131,7 +95,7 @@ function StudentRecord() {
           }
         });
 
-        const statusData = [
+        const statusChartData = [
           presentCount,
           lateCount,
           absentCount,
@@ -139,7 +103,7 @@ function StudentRecord() {
           nullCount,
         ];
 
-        setStatusData(statusData);
+        setStatusData(statusChartData);
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -152,6 +116,10 @@ function StudentRecord() {
     }
   };
 
+  const handleCourseSelect = (selectedCourse) => {
+    setSelectedCourse(selectedCourse);
+  };
+
   const data = {
     labels: ["Present", "Late", "Absent", "Leave Permitted", "Not Registered"],
     datasets: [
@@ -161,6 +129,11 @@ function StudentRecord() {
       },
     ],
   };
+
+  // Extract unique course names from statusList
+  const uniqueCourseNames = [
+    ...new Set(statusList.map((item) => item.CourseName)),
+  ];
 
   return (
     <div className="outer ">
@@ -185,6 +158,20 @@ function StudentRecord() {
         </button>
       </div>
 
+      <div className="rounded">
+        <Select
+          options={[
+            { value: "", label: "Select Course" },
+            ...uniqueCourseNames.map((course) => ({
+              value: course,
+              label: course,
+            })),
+          ]}
+          onChange={handleCourseSelect}
+          placeholder="Select Course"
+        />
+      </div>
+
       <div className="container-fluid bg-info vh-100 vw-100">
         <h3>Students</h3>
         {error ? (
@@ -200,17 +187,15 @@ function StudentRecord() {
                 </tr>
               </thead>
               <tbody>
-                {searchResults.map((Record) => {
+                {filteredStatusList.map((Record) => {
                   return (
                     <tr key={Record.StudentID}>
                       <td>{Record.CourseName}</td>
-
                       <td>
                         {Record.AttendanceDate
                           ? Record.AttendanceDate.split("T")[0]
                           : "N/A"}
                       </td>
-
                       <td>{Record.Status}</td>
                     </tr>
                   );

@@ -56,11 +56,16 @@ function HomeAttendance() {
 
   const handleStatusChange = async (RecordID, selectedValue) => {
     try {
-      const currentDate = selectedDate
-        ? selectedDate
-        : new Date().toLocaleDateString(); // Get current date if no date is selected
+      let currentDate;
+      if (selectedDate) {
+        const date = new Date(selectedDate);
+        date.setHours(date.getHours() + 5);
+        currentDate = date.toLocaleDateString();
+      } else {
+        currentDate = new Date().toLocaleDateString();
+      }
 
-      const method = selectedDate ? "PUT" : "POST"; // Determine HTTP method based on selected date
+      //const method = selectedDate ? "PUT" : "POST";
 
       //if (method === "PUT") {
       // Use PUT request if datepicker was selected
