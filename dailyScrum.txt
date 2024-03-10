@@ -80,3 +80,13 @@ Ashok Chand
 2. Doing 
 - heroku hosting
 - aws mysql database hosting
+
+2024/03/9 
+Ashok Chand  
+1. Done since last meeting
+- working on heruku
+- worked on error handling
+- worked on aws hosting
+2. Doing 
+- heroku hosting
+-
