@@ -90,3 +90,10 @@ Ashok Chand
 2. Doing 
 - heroku hosting
 -
+
+2024/03/10 
+Ashok Chand  
+1. Done since last meeting
+- hosted app on heruku
+- worked on aws hosting
+
